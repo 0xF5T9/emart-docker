@@ -1,9 +1,11 @@
+version: "3.0"
+
 services:
   backend-mysql-server:
     build:
       context: ./
       dockerfile: ./Docker/backend-mysql-server/Dockerfile
-    restart: no # unless-stopped
+    restart: unless-stopped
     env_file: ./.env
     environment:
       - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
@@ -18,7 +20,7 @@ services:
     build:
       context: ./
       dockerfile: ./Docker/backend-node-server/Dockerfile
-    restart: no # unless-stopped
+    restart: unless-stopped
     ports:
       - $BACKEND_NODE_SERVER_LOCAL_PORT:$BACKEND_NODE_SERVER_DOCKER_PORT
     environment:
@@ -40,14 +42,12 @@ services:
     build:
       context: ./
       dockerfile: ./Docker/frontend-node-server/Dockerfile
-      # We will pass env variables via 'args:' instead of 'environment:'
-      # because variables passed with 'environment:' are not available during docker build context.
       args: 
       - NODE_ENV=$FRONTEND_NODE_ENV
       - API_URL=$FRONTEND_API_URL
       - UPLOAD_URL=$FRONTEND_UPLOAD_URL
       - PORT=$FRONTEND_NODE_SERVER_DOCKER_PORT
-    restart: no # unless-stopped
+    restart: unless-stopped
     ports:
     - $FRONTEND_NODE_SERVER_LOCAL_PORT:$FRONTEND_NODE_SERVER_DOCKER_PORT
   nginx-server:
@@ -58,7 +58,7 @@ services:
     build:
       context: ./
       dockerfile: ./Docker/nginx-server/Dockerfile
-    restart: no # unless-stopped
+    restart: unless-stopped
     ports:
       - 80:80
       - 443:443

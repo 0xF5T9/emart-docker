@@ -1,0 +1,23 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Start Docker",
+            "detail": "Build images and starts containers.",
+            "type": "shell",
+            "dependsOrder": "sequence",
+            "dependsOn": ["Clear Docker"],
+            "command": "docker-compose up --build --force-recreate",
+            "problemMatcher": []
+        },
+        {
+            "label": "Clear Docker",
+            "detail": "Stops containers and removes containers, networks, volumes, and images created by up.",
+            "type": "shell",
+            "command": "docker-compose down --rmi all",
+            "problemMatcher": []
+        }
+    ]
+}

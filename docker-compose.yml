@@ -1,0 +1,77 @@
+services:
+  backend-mysql-server:
+    build:
+      context: ./
+      dockerfile: ./Docker/backend-mysql-server/Dockerfile
+    restart: no # unless-stopped
+    env_file: ./.env
+    environment:
+      - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE=$MYSQL_DEFAULT_DATABASE
+    ports:
+      - $MYSQL_LOCAL_PORT:$MYSQL_DOCKER_PORT
+    volumes:
+      - vyfood-database:/var/lib/mysql
+  backend-node-server:
+    depends_on:
+      - backend-mysql-server
+    build:
+      context: ./
+      dockerfile: ./Docker/backend-node-server/Dockerfile
+    restart: no # unless-stopped
+    ports:
+      - $BACKEND_NODE_SERVER_LOCAL_PORT:$BACKEND_NODE_SERVER_DOCKER_PORT
+    environment:
+      - NODE_ENV=$BACKEND_NODE_ENV
+      - CORS_ORIGIN=$BACKEND_CORS_ORIGIN
+      - NODEMAILER_USER=$BACKEND_NODEMAILER_USER
+      - NODEMAILER_APP_PASSWORD=$BACKEND_NODEMAILER_APP_PASSWORD
+      - NODEMAILER_DOMAIN=$BACKEND_NODEMAILER_DOMAIN
+      - DATABASE_HOST=backend-mysql-server
+      - DATABASE_USER=root
+      - DATABASE_PASSWORD=$MYSQL_ROOT_PASSWORD
+      - DATABASE_NAME=$MYSQL_DEFAULT_DATABASE
+      - PORT=$BACKEND_NODE_SERVER_DOCKER_PORT
+    volumes:
+      - vyfood-upload:/myapp/upload
+  frontend-node-server:
+    depends_on:
+      - backend-node-server
+    build:
+      context: ./
+      dockerfile: ./Docker/frontend-node-server/Dockerfile
+      # We will pass env variables via 'args:' instead of 'environment:'
+      # because variables passed with 'environment:' are not available during docker build context.
+      args: 
+      - NODE_ENV=$FRONTEND_NODE_ENV
+      - API_URL=$FRONTEND_API_URL
+      - UPLOAD_URL=$FRONTEND_UPLOAD_URL
+      - PORT=$FRONTEND_NODE_SERVER_DOCKER_PORT
+    restart: no # unless-stopped
+    ports:
+    - $FRONTEND_NODE_SERVER_LOCAL_PORT:$FRONTEND_NODE_SERVER_DOCKER_PORT
+  nginx-server:
+    depends_on:
+      - backend-mysql-server
+      - backend-node-server
+      - frontend-node-server
+    build:
+      context: ./
+      dockerfile: ./Docker/nginx-server/Dockerfile
+    restart: no # unless-stopped
+    ports:
+      - 80:80
+      - 443:443
+    environment:
+      - DOMAIN=$NGINX_DOMAIN
+      - API_DOMAIN=$NGINX_API_DOMAIN
+      - UPLOAD_DOMAIN=$NGINX_UPLOAD_DOMAIN
+      - BACKEND_NODE_SERVER_DOCKER_PORT=$BACKEND_NODE_SERVER_DOCKER_PORT
+      - FRONTEND_NODE_SERVER_DOCKER_PORT=$FRONTEND_NODE_SERVER_DOCKER_PORT
+      - NGINX_CERTIFICATE_FILE_NAME=$NGINX_CERTIFICATE_FILE_NAME
+      - NGINX_CERTIFICATE_KEY_FILE_NAME=$NGINX_CERTIFICATE_KEY_FILE_NAME
+    volumes:
+      - vyfood-upload:/myapp/upload
+volumes: 
+  vyfood-database:
+  vyfood-upload:

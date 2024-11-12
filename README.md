@@ -91,6 +91,9 @@ NGINX_CERTIFICATE_KEY_FILE_NAME=cert-key.pem
 ```bash
 # Start containers.
 docker-compose up --build --force-recreate
+
+# Clear containers and its images. (This will not purge volumes)
+docker-compose down --rmi all
 ```
 
 Check `.vscode` folder for scripts and tasks.

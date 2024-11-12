@@ -94,6 +94,17 @@ docker-compose up --build --force-recreate
 
 # Clear containers and its images. (This will not purge volumes)
 docker-compose down --rmi all
+
+# Backup: Export database SQL file.
+# Install 'mysql-server' on host machine to use the mysql cli tools to access the container mysql server.
+# Note: Use domain or public IPv4 instead of localhost otherwise it will access the host mysql server instead of the container server.
+cd ~/backup
+mysqldump -h mydomain.com -P 3307 -u root -pMySQLPassword database_name > schema.sql
+
+# Backup: Export files from running container.
+cd ~/backup
+sudo docker ps # Get the backend node server container id. (This is where we store the uploaded image files.)
+sudo docker cp bae22f17db09:/myapp/upload . # Replace 'bae22f17db09' with the actual id.
 ```
 
 Check `.vscode` folder for scripts and tasks.

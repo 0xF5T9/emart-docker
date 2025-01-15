@@ -1,6 +1,6 @@
-# VyFood Docker
+# E-Mart Docker
 
-> Repository that dockerize VyFood application. (Production only)
+> Repository that dockerize E-Mart application. (Production only)
 
 ## Prerequisites
 
@@ -15,8 +15,8 @@
 #### 1. Clone repositories
 
 ```bash
-git clone https://github.com/0xF5T9/vyfood-backend
-git clone https://github.com/0xF5T9/vyfood-frontend
+git clone https://github.com/0xF5T9/emart-backend
+git clone https://github.com/0xF5T9/emart-frontend
 ```
 
 #### 2. Add import files
@@ -24,7 +24,7 @@ git clone https://github.com/0xF5T9/vyfood-frontend
 Create `import` folder and copy `schema.sql`, `upload.zip` files into it.
 
 - `schema.sql`: This file will be executed on the database when run docker container for the first time (No volume created yet)
-- `upload.zip`: This file will be unzipped into `vyfood-backend` directory when run docker container for the first time (No volume created yet)
+- `upload.zip`: This file will be unzipped into `emart-backend` directory when run docker container for the first time (No volume created yet)
 
 Expected output:
 
@@ -63,7 +63,7 @@ root/
 MYSQL_LOCAL_PORT=3307
 MYSQL_DOCKER_PORT=3306
 MYSQL_ROOT_PASSWORD=myrootpassword
-MYSQL_DEFAULT_DATABASE=vyfood
+MYSQL_DEFAULT_DATABASE=emart
 
 BACKEND_NODE_SERVER_LOCAL_PORT=1284
 BACKEND_NODE_SERVER_DOCKER_PORT=1284

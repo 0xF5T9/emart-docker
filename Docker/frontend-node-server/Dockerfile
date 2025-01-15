@@ -1,7 +1,7 @@
 FROM node:20
 
 WORKDIR /myapp
-COPY vyfood-frontend .
+COPY emart-frontend .
 
 RUN npm install --no-audit
 

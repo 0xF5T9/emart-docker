@@ -13,7 +13,7 @@ services:
     ports:
       - $MYSQL_LOCAL_PORT:$MYSQL_DOCKER_PORT
     volumes:
-      - vyfood-database:/var/lib/mysql
+      - emart-database:/var/lib/mysql
   backend-node-server:
     depends_on:
       - backend-mysql-server
@@ -36,7 +36,7 @@ services:
       - DATABASE_NAME=$MYSQL_DEFAULT_DATABASE
       - PORT=$BACKEND_NODE_SERVER_DOCKER_PORT
     volumes:
-      - vyfood-upload:/myapp/upload
+      - emart-upload:/myapp/upload
   frontend-node-server:
     depends_on:
       - backend-node-server
@@ -72,7 +72,7 @@ services:
       - NGINX_CERTIFICATE_FILE_NAME=$NGINX_CERTIFICATE_FILE_NAME
       - NGINX_CERTIFICATE_KEY_FILE_NAME=$NGINX_CERTIFICATE_KEY_FILE_NAME
     volumes:
-      - vyfood-upload:/myapp/upload
+      - emart-upload:/myapp/upload
 volumes: 
-  vyfood-database:
-  vyfood-upload:
+  emart-database:
+  emart-upload:

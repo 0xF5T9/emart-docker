@@ -1,7 +1,7 @@
 FROM node:20
 
 WORKDIR /myapp
-COPY vyfood-backend .
+COPY emart-backend .
 COPY import/upload.zip .
 
 RUN unzip -o upload.zip
